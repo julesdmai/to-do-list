@@ -1,11 +1,37 @@
 import "./styles.css";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "./NewTodoForm";
 import NewTodoForm from "./NewTodoForm";
 import TodoList from "./TodoList";
 
+// // Pattern of React components
+// Hooks on top
+// Helper functions
+// Return JSX render
+
 export default function App() {
-  const [todos, setTodos] = useState([]);
+  // To get our data from local storage, we need to call useState()
+  // Instead of passing useState a default value, we are going to pass it a function
+  const [todos, setTodos] = useState(() => {
+    const localValue = localStorage.getItem("ITEMS");
+
+    // First, checking if there already is data at localStorage
+    // If there is no prior data, then state 'todos' is initialized to an empty array []
+    if (localValue == null) return [];
+
+    // If there is prior data, then state 'todos' is assigned the value of the parsed local storage data
+    return JSON.parse(localValue);
+  });
+
+
+
+  // Persistent storage with useEffect()
+  // Run this function every time any values in [todos] changes
+  // This stores our data in local storage
+  // But we aren't actually getting our information from local storage
+  useEffect(() => {
+    localStorage.setItem("ITEMS", JSON.stringify(todos))
+  }, [todos])
 
   // we need a way to update the state
   function addTodo(title) {
