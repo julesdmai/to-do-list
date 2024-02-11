@@ -1,8 +1,8 @@
 import { useState } from "react"
 
 // note destructure onSubmit props
+// eslint-disable-next-line react/prop-types
 export default function NewTodoForm({ onSubmit }) {
-
     // create another piece of state 'todos'
     // initialized to empty array
 
