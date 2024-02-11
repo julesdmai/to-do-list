@@ -1,7 +1,7 @@
 import React from 'react'
 import TodoItem from "./TodoItem";
 
-export default function TodoList({ todos }) {
+export default function TodoList({ todos, toggleTodo, deleteTodo }) {
     return (
         <ul className="list" >
             {/* This is called short circuiting */}
@@ -12,7 +12,7 @@ export default function TodoList({ todos }) {
                 // each iterated tag needs key
                 // spread props of todo
                 return (
-                    <TodoItem {...todo} key={todo.id} />
+                    <TodoItem {...todo} key={todo.id} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
                 );
             })}
         </ul>
