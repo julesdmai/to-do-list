@@ -9,22 +9,22 @@ export default function App() {
   // when to use state?
   // any type of data that you want to have
   // re-render your component when it changes
-  
+
   // so when we make changes to newItem or todos
   // we want our app to re-render to reflect those changes
 
   const [newItem, setNewItem] = useState("");
   const [todos, setTodos] = useState([]);
 
-  function handleSubmit (e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
     // when we need the current value, we pass in a function like this
     setTodos((currentTodos) => {
       return [
-        ...currentTodos, 
+        ...currentTodos,
         { id: crypto.randomUUID(), title: newItem, completed: false },
-      ]  
+      ]
     })
 
 
@@ -33,7 +33,7 @@ export default function App() {
   }
 
   // want to update todos 'completed' property
-  function toggleTodo (id, completed, ) {
+  function toggleTodo(id, completed,) {
     // call the setter function to updaate state
     // because we care about the current value, we pass in a function like this
     // This approach is recommended when the new state depends on the old state, ensuring you're working with the most recent state.
@@ -61,40 +61,60 @@ export default function App() {
   // This pattern ensures immutability of the state, a key principle in React development, by creating a new array instead of modifying the existing one directly, thus enabling React to efficiently detect changes and update the UI accordingly.
 
 
+
+
+
+  function deleteTodo(id) {
+    setTodos(currentTodos => {
+      // if id is not the id passed in, then want to keep  it
+      // if id is the same as id passed in, then remove
+      return currentTodos.filter(todo => (todo.id !== id))
+    })
+  }
+
+
   return (
     <>
-    {/* autocomplete="off" on the <form> hides history */}
+      {/* autocomplete="off" on the <form> hides history */}
       <form onSubmit={handleSubmit} className="new-item-form">
         <div className="form-row">
           <label htmlFor="item">New Item</label>
-          <input 
-            value={newItem} 
+          <input
+            value={newItem}
             // value needs to be assigned to a variable to be dynamic
             // and the way we change this variable is to call
             // the setter function
             // note: when you change the state variable, it re-renders the component
             // when you don't need the current value, you can access state this way
-            onChange={e => setNewItem(e.target.value)} 
-            type="text" 
+            onChange={e => setNewItem(e.target.value)}
+            type="text"
             id="item"
           />
         </div>
         <button className="btn">Add</button>
       </form>
       <h1 className="header">Todo List</h1>
-      <ul className="list"j >
+      <ul className="list" >
         {/* .map() returns an array
         In React, arrays are rendered as elements one after another */}
         {todos.map(todo => {
           // each iterated tag needs key
           return <li key={todo.id}>
-          <label>
-            {/* when checkbox is changed, invoke function toggleTodo. the function takes two arguments. the todo.id and the todo.completed */}
-            <input type="checkbox" checked={todo.completed} onChange={e => toggleTodo(todo.id, e.target.checked)}/>
-            {todo.title}
-          </label>
-          <button className="btn btn-danger">Delete</button>
-        </li>
+            <label>
+              {/* when checkbox is changed, invoke function toggleTodo. the function takes two arguments. the todo.id and the todo.completed */}
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={e => toggleTodo(todo.id, e.target.checked)}
+              />
+              {todo.title}
+            </label>
+            {/* onClick needs to invoke an anonymous function returning the function invocation of deleteTodo passing in todo.id
+            onClick needs an arrow function
+            you don't want to pass in the result of calling deleteTodo
+            */}
+            <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">Delete</button>
+          </li>
         })}
       </ul>
     </>
