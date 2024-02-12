@@ -18,6 +18,7 @@ export default function NewTodoForm({ onSubmit }) {
 
 
     function handleSubmit(e) {
+        // prevents default reloading on submit
         e.preventDefault();
 
         // // when we need the current value, we pass in a function like this
